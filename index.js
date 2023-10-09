@@ -20,18 +20,25 @@ class Parser {
         continue;
       }
 
-
       if (line.startsWith("$")) {
         const [variable, dataRange] = line
           .substring(1)
           .split("=")
           .map((item) => item.trim());
-          if (dataRange.startsWith("(")) {
-                // Need to set the variable to equal the date extracted from the dataRange. I.E. "FirstFriday"/febuaray => 02/05/2021
-              this.holidayNames[variable] = dataRange;
-          } else {
-              this.holidayNames[variable] = dataRange;
-          }
+        if (dataRange.startsWith("(#O")) {
+          // Need to set the variable to equal the date extracted from the dataRange. I.E. "FirstFriday"/febuaray => 02/05/2021
+
+          const ordinal = dataRange.substring(4).slice(0, -1);
+          const date = this.calculateOrdinalDate(ordinal);
+          console.log(ordinal, date);
+
+          this.holidayNames[variable] = date;
+        } else if (dataRange.startsWith("(#V")) {
+          // we need to calculate a new date with easter - num
+          //
+        } else {
+          this.holidayNames[variable] = dataRange;
+        }
       } else if (line.startsWith("#V#")) {
         const [preDefinedVar, imagePath] = line
           .substring(3)
@@ -57,22 +64,90 @@ class Parser {
     }
   }
 
-  matchesOrdinalDate(date, ordinalDate) {
-    const [ordinal, month] = ordinalDate.split("/");
-    const day = ordinal.toLowerCase().replace(/[^a-z]/g, "");
-    const monthName =
-      month.charAt(0).toUpperCase() + month.slice(1).toLowerCase();
-    const targetDate = new Date(
-      date.getFullYear(),
-      this.getMonthNumber(monthName),
-      1,
-    );
-    while (targetDate.getDay() !== this.getDayNumber(day)) {
-      targetDate.setdate(targetDate.getDate() + 1);
+  calculateOrdinalDate(ordinalDate) {
+    // Split the ordinalDate into parts: ordinal and month
+    const [ordinal, month] = ordinalDate.split("/").map((item) => item.trim());
+
+    // Convert the month name to its numerical representation
+    const monthNumber = this.getMonthNumber(month);
+
+    // Create a new date object for the first day of the specified month
+    const targetDate = new Date(2021, monthNumber, 1);
+
+    // Determine the day of the week corresponding to the ordinal (e.g., "FirstMonday")
+    const dayOfWeek = this.getOrdinalDayOfWeek(ordinal);
+
+    let occurence= this.extractOccurrenceWord(ordinal);
+
+    while (occurence > 0) {
+        if (targetDate.getDay() === dayOfWeek) {
+            occurence--;
+        }
+        if (occurence > 0) {
+            targetDate.setDate(targetDate.getDate() + 1);
+        }
     }
 
-    return date.getMonth() === targetDate.getMonth();
+    const formattedDate = `${String(targetDate.getMonth() + 1).padStart(
+      2,
+      "0",
+    )}-${String(targetDate.getDate()).padStart(
+      2,
+      "0",
+    )}-${targetDate.getFullYear()}`;
+
+    return formattedDate;
   }
+
+    extractOccurrenceWord(ordinal) {
+        if (ordinal.includes("First")) {
+            return 1;
+        } else if (ordinal.includes("Second")) {
+            return 2;
+        } else if (ordinal.includes("Third")) {
+            return 3;
+        } else if (ordinal.includes("Fourth")) {
+            return 4;
+        } else if (ordinal.includes("Last")) {
+            return 5;
+        }
+}
+
+  getOrdinalDayOfWeek(ordinal) {
+    // Define an array of valid day names
+    const validDays = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+
+    const daysToNums = {
+        "sunday": 0,
+        "monday": 1,
+        "tuesday": 2,
+        "wednesday": 3,
+        "thursday": 4,
+        "friday": 5,
+        "saturday": 6,
+    };
+
+    // Normalize the ordinal by converting to lowercase and removing non-alphabetic characters
+    const normalizedOrdinal = ordinal.toLowerCase().replace(/[^a-z]/g, "");
+
+    // Find the first valid day name that appears in the normalizedOrdinal
+    const dayOfWeek = validDays.find((day) => normalizedOrdinal.includes(day));
+
+    if (dayOfWeek) {
+      return daysToNums[dayOfWeek]; // Return the found day of the week
+    } else {
+      throw new Error(`Invalid ordinal date: ${ordinal}`);
+    }
+  }
+  // Need a method that takes in a date and returns the name of the day that corresponds
 
   getMonthNumber(monthName) {
     const months = {
@@ -105,8 +180,6 @@ class Parser {
 
     return days[dayOfWeek.toLowerCase()];
   }
-
-  // Need a method that takes in a date and returns the name of the day that corresponds
 
   getDayNameFromDate(date) {
     for (const key in this.holidayNames) {
