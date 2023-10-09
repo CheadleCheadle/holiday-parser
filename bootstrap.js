@@ -6,8 +6,10 @@ const parser = new Parser(path);
 
 parser.parseFile();
 
-const currentDate = new Date('03/29');
-const imageFilename = parser.getImageFilename(currentDate);
+const currentDate = new Date('01/18');
+const holidayName = parser.getDayNameFromDate('01/18');
+
+// const imageFilename = parser.getImageFilename(holidayName)
 
 parser.log();
 
@@ -20,3 +22,4 @@ if (imageFilename) {
 }
 
 */
+

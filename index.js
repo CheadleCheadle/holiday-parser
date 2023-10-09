@@ -4,10 +4,12 @@ class Parser {
   constructor(filePath) {
     this.filePath = filePath;
     this.data = {};
+    this.holidayNames = {};
   }
 
   log() {
       console.log(this.data);
+      console.log(this.holidayNames);
   }
 
   parseFile() {
@@ -24,7 +26,7 @@ class Parser {
         .substring(1)
         .split("=")
         .map((item) => item.trim());
-      this.data[variable] = dataRange;
+      this.holidayNames[variable] = dataRange;
     } else if (line.startsWith("#V#")) {
       const [preDefinedVar, imagePath] = line
         .substring(3)
@@ -38,23 +40,36 @@ class Parser {
         .map((item) => item.trim());
       this.data[dataRange] = imagePath;
     } else if (line.startsWith("#O#")) {
-      const [variable, dataRange] = line
-        .substring(1)
-        .split("=")
-        .map((item) => item.trim());
+        const [ordinalDate, imagePath] = line.substring(3).split("=").map((item) => {
+            item.trim()
+        });
 
-      if (dataRange.startsWith("(")) {
-        const ordinalDate = dataRange.substring(4).split("").pop().join("");
-        this.data[variable] = ordinalDate;
-      } else {
-        this.data[variable] = dataRange;
-      }
+        this.data[ordinalDate] = imagePath;
+
+
+      
     }
   }
 }
 
+// Need a method that takes in a date and returns the name of the day that corresponds
+
+getDayNameFromDate(date) {
+
+    for (const key in this.holidayNames) {
+        const holidayDate= this.holidayNames[key];
+        if (holidayDate=== date) {
+            console.log(key);
+            console.log("Image filepath",this.data[key]);
+            return key;
+        }
+    }
+    return null;
+}
+
   getImageFilename(date) {
     for (const key of Object.keys(this.data)) {
+        console.log(key)
       if (key.includes("/") && this.isDateInRange(date, key)) {
         return this.data[key];
       }
