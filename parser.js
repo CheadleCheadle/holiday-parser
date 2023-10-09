@@ -47,8 +47,8 @@ class Parser {
             this.holidayNames[variable] = date;
           }
         } else if (dataRange.includes(":")) {
-            const dateRange= this.parseDateRange(dataRange);
-            this.holidayNames[variable] = dateRange;
+          const dateRange = this.parseDateRange(dataRange);
+          this.holidayNames[variable] = dateRange;
         } else {
           this.holidayNames[variable] = dataRange;
         }
@@ -240,8 +240,13 @@ class Parser {
 
   getDayNameFromDate(date) {
     //Need to handle ranges! will probably be an object or an array
+    let rangeKey = this.getDateWithinRange(date);
+    if (rangeKey) {
+      return this.data[rangeKey];
+    }
     for (const key in this.holidayNames) {
       const holidayDate = this.holidayNames[key];
+      // For ranges of dates inside of a list
       if (holidayDate === date) {
         return this.data[key];
       }
@@ -249,6 +254,16 @@ class Parser {
     return "default/filepath";
   }
 
+    getDateWithinRange(date) {
+        // If date is within a range we need to return the latest ranges graphic path
+        const result = this.isDateInRange(date);
+        if (result) {
+          return result;
+        } else {
+          return false;
+        }
+
+    }
   getImageFilename(date) {
     for (const key of Object.keys(this.data)) {
       console.log(key);
@@ -260,11 +275,15 @@ class Parser {
     return null;
   }
 
-  isDateInRange(date, dateRange) {
-    const [start, end] = dateRange
-      .split(":")
-      .map((item) => new Date(item.trim()));
-    return date >= start && date <= end;
+  isDateInRange(date) {
+    const keys = Object.keys(this.holidayNames).reverse();
+    for (const key of keys) {
+      const holidayDate = this.holidayNames[key];
+      if (Array.isArray(holidayDate) && holidayDate.includes(date)) {
+        return key;
+      }
+    }
+    return null;
   }
 }
 module.exports = Parser;
