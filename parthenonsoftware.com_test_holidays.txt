@@ -1,0 +1,184 @@
+//				Calendar File for year 2021
+//
+//	Set up default graphics for a month, or a range of dates.  
+//	Multiple graphics may even be set up for the same day.  
+//  The graphic that 'wins' will be the last qualifying graphic that is encountered.
+//	Therefore, begin with a graphic for the entire year, then, 
+//	perhaps a graphic for a season, followed by month, week, day range, 
+//	day or whatever is desired.
+//  Lines with no start character will be ignored, as will the comment lines.
+//
+//	'$' begins a line that defines a variable
+//	'&' begins a line that defines a date or date range
+//		'&03/17/2021 = "/Holidays/3-17_logoStPatricksDay.gif"'
+//	#V# begins a line that uses a predefined variable
+//	#O# begins a line that uses an 'ordinal' definition of a date
+//		These are used for dates that move from year to year but they are
+//		regularly defined.
+//		#O#ThirdMonday/February = "PresidentsDay.gif"
+//      holidays that have rules can be defined by their date or by their rule.
+//	#V#LaborDay = "LaborDay.gif"   or
+//	#O#FirstMonday/September = "LaborDay.gif"  are identical.
+//		The second option, presumably, will require less maintenance and is encouraged.
+//	e.g.
+//  how to do date range in a variable:  $Definition = 02/12/2021 : 02/22/2021
+
+//	#O# are 'ordinal' definitions; 'FirstMonday/September'
+//  #V# are previously definited variables; 'FlagDay'
+//	Define variables here.
+
+
+// 	changes every year
+$WearRedDay = 02/05/2021
+$SuperBowl = 02/07/2021
+$TroutFishingStarts = 04/01/2021
+$Easter = 04/04/2021
+// year of the Ox
+$Chinese New Year = 02/12/2021
+
+// 		Local Holiday Dates:
+$WNYMapleFestival1 = 03/20/2021 : 3/28/2021
+$WNYMapleFestival2 = 03/27/2021 : 3/28/2021
+$TroutFishingStarts = 04/01
+// $HollandTulipFestival - May 1-8
+//                  2020, check later for 2021
+$BowHuntingEarly = 10/01/2021
+$CrossbowHunting = 10/7//2021
+$RegularHunting = 11/21/2021
+//    (opens Saturday) Regular Hunting
+$LateBowHunting = 12/14/2021
+
+$NewYears = 01/01
+$MLK = 01/18
+$GroundhogDay = 02/02
+$WearRedDay = (#O#FirstFriday/February)
+$ThankaMailMan = 02/04
+$LincolnsBDay = 02/12
+$ValentinesDay = 02/14
+$WashingtonsBDay = 02/22
+$PresidentsDay = (#O#ThirdMonday/February)
+//	President's day needs to override Lincoln's or Washington's Birthdays
+$SusanBAnthony = 02/15
+$MardiGras = (#V#Easter - 47)
+$ReadAcrossAmericaDay = 03/02
+$MomAndPopStore = 03/29
+$StPatricksDay = 03/17
+$FirstDaySpring = 03/20
+$DaylightSavingsOn = (#O#SecondSunday/March)
+$AprilsFool = 04/01
+$PalmSunday = (#V#Easter - 7)
+$GoodFriday = (#V#Easter - 2)
+//$Easter - change above
+$NationalLibraryWorkers = 04/14
+$TaxDay = 04/15
+$EarthDay = 04/22
+$ArborDay = (#O#LastFriday/April)   
+$JeffersonsBDay = 04/13
+$WorldBookDay = 04/23
+$CincoDeMayo = 05/05
+$NursesDay = 05/06
+$MothersDay = (#O#SecondSunday/May)
+$MemorialDay = (#O#LastMonday/May)
+$ArmedForcesDay = 05/15
+$FlagDay = 06/14
+$FirstDaySummer = 06/21
+$FathersDay = (#O#ThirdSunday/June)
+$IndependenceDay = 07/04
+$PurpleHeartDay = 08/07
+$NationalAviationDay = 08/19
+$SeniorCitizensDay = 08/21
+$LaborDay = 09/06/2021
+$PatriotsDay = 09/11
+$EquinoxFall = 09/22
+$ColumbusDay = 10/11
+$Halloween = 10/31
+$Thanksgiving = (#O#FourthThursday/November)
+$VeteransDay = 11/11/2021
+$DaylightSavingsOff = (#O#FirstSunday/November)
+$SolsticeWinter = 12/21
+$Christmas = 12/25
+$NewYearsEve = 12/31
+
+
+//		*** January Holidays ***
+#V#NewYears = "/Holidays/NewYears/logoFireworks.gif"
+#V#MLK = "/Holidays/logoMartinLutherKingJr_Jan 21.png"
+
+//		*** February Holidays ***
+#V#GroundhogDay = "/Holidays/2-2_logoGroundhogAnimated.gif"
+#V#PresidentsDay = "/Holidays/Patriotic/logoPresidentsDay.gif";
+#V#ValentinesDay = "/Holidays/logoValentines.gif"
+#V#ThankaMailMan = "/Holidays//Minor/2-4_logoMailManDay.png"
+#V#WearRedDay = "/Holidays//Minor/2-1_logoWearRedDay.png"
+#V#SuperBowl = "/Holidays//Minor/2-3logoSuperBowl.png"
+#V#LincolnsBDay = "/Holidays/Patriotic/2-12LogoLincolnAni.gif"
+#V#SusanBAnthony = "/Holidays//Minor/2-15_logoSusanBAnthony.png"
+#V#PresidentsDay = "/Holidays/Patriotic/2-17PresidentAni.gif"
+    // Chinese New Year - year of the Ox
+#V#ChineseNewYear = /Holidays/Minor/ChineseNewYear.png"
+
+
+
+
+
+//		*** March Holidays ***
+#V#ReadAcrossAmericaDay = "/Holidays/Minor/3-2ReadAcrossAmerica.png"
+#V#MardiGras = "/Holidays/Minor/3-05_logoMardiGras.png"
+#V#DaylightSavingsOn = "/Holidays/3-10_logoDaylightSavings.png"
+#V#StPatricksDay = "/Holidays/3-17_logoStPatricksDay.gif"
+#V#FirstDaySpring = "/Holidays/FirstDayOfSpringGrowing.gif"
+#V#MomAndPopStore = "/Holidays/Minor/3-29_logoMom+PopStoreDay.png"
+#V#WNYMapleFestival1 = "/Holidays/Minor/wny1.png"
+#V#WNYMapleFestival2 = "/Holidays/Minor/wny2.png"
+
+//		*** April Holidays ***
+#V#AprilsFool = "/Holidays/Minor/logoAprilFoolsAni.gif"
+#V#PalmSunday = "/Holidays/PalmSundayAni.gif"
+#V#GoodFriday = "/Holidays/GoodFridayAni.gif"
+#V#Easter = "/Holidays/4-21_logoEaster.png"
+#V#04/06/2021 = "/Holidays/4-9_logoLibraryWorkersDay.png"
+#V#JeffersonsBDay = "/Holidays/Minor/ThomasJeffersonsBirthday.png"
+#V#TaxDay = "/Holidays/4-15_logoTax.png"
+#V#EarthDay = "/Holidays/Minor/4-22_logoEarthDay.png"
+#V#ArborDay = "/Holidays/Minor/4-26 logoArborDay.png"
+#V#WorldBookDay = "/Holidays/Minor/4-23_logoWorldBookDay.png"
+
+//		*** May Holidays ***
+#V#CincoDeMayo = "/Holidays/Minor/CincoDeMayo.png"
+#V#NursesDay = "/Holidays/Minor/5-6_logoNursesDay.png"
+#V#MothersDay = "/Holidays/5-12_logoMother'sDay.gif"
+#V#MemorialDay = "/Holidays/Patriotic/5-27_logoMemorialDayAni.gif"
+#V#ArmedForcesDay = "/Holidays/Patriotic/ArmedForcesDay.png"
+
+
+//		*** June Holidays ***
+#V#FathersDay = "/Holidays/logoFathersDayAni.gif"
+#V#FlagDay = "/Holidays/Patriotic/logoFlagDayAni.gif"
+
+//		*** July Holidays ***
+#V#IndependenceDay = "/Holidays/Patriotic/7-4_logoFourthofJulyAni.gif"
+&07/29/2021 = "/Holdays/Minor/international_sysadmins_day.png"
+
+//		*** August Holidays ***
+#V#PurpleHeartDay = "/Holidays/Minor/PurpleHeartDay.png"
+#V#NationalAviationDay = "/Holidays/Minor/NationalAviationDay.png"
+#V#SeniorCitizensDay = "/Holidays/Minor/SeniorCitizensDay.png"
+
+//		*** September Holidays ***
+#V#LaborDay = "/Holidays/LogoLaborDay.png"
+#V#PatriotsDay = "/Holidays/Patriotic/9-11LogoPatriotsDay.png"
+
+//		*** October Holidays ***
+#V#ColumbusDay = "/Holidays/10-14_logoColumbusDay.png"
+
+    // Halloween
+#V#Halloween = "/Holidays/Halloween/logoScarecrowOnFence.png"
+
+//		*** November Holidays ***
+#V#VeteransDay = "/Holidays/Patriotic/11-11_VeteransDay.png"
+#V#Thanksgiving = "/Holidays/11-28Thanksgiving.png"
+#V#DaylightSavingsOff = "/Holidays/11-3_DaylightSavingsAni.gif"
+
+//		*** December Holidays ***
+#V#Christmas = "/Holidays/Christmas/Candle+SparklesAni.gif"
+#V#NewYearsEve = "/Holidays/logoFireworks.gif"
