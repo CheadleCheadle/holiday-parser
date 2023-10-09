@@ -204,7 +204,6 @@ class Parser {
       throw new Error(`Invalid ordinal date: ${ordinal}`);
     }
   }
-  // Need a method that takes in a date and returns the name of the day that corresponds
 
   getMonthNumber(monthName) {
     const months = {
@@ -239,40 +238,32 @@ class Parser {
   }
 
   getDayNameFromDate(date) {
-    //Need to handle ranges! will probably be an object or an array
+      // If date is within a range we find the last occurence
     let rangeKey = this.getDateWithinRange(date);
     if (rangeKey) {
       return this.data[rangeKey];
     }
+      const dateParts = date.split('/');
+      const dateWithoutYear = `${dateParts[0]}/${dateParts[1]}`;
+      console.log("No year", dateWithoutYear);
     for (const key in this.holidayNames) {
       const holidayDate = this.holidayNames[key];
       // For ranges of dates inside of a list
-      if (holidayDate === date) {
+      if (holidayDate === date || holidayDate === dateWithoutYear) {
         return this.data[key];
       }
     }
     return "default/filepath";
   }
 
-    getDateWithinRange(date) {
-        // If date is within a range we need to return the latest ranges graphic path
-        const result = this.isDateInRange(date);
-        if (result) {
-          return result;
-        } else {
-          return false;
-        }
-
+  getDateWithinRange(date) {
+    // If date is within a range we need to return the latest ranges graphic path
+    const result = this.isDateInRange(date);
+    if (result) {
+      return result;
+    } else {
+      return false;
     }
-  getImageFilename(date) {
-    for (const key of Object.keys(this.data)) {
-      console.log(key);
-      if (key.includes("/") && this.isDateInRange(date, key)) {
-        return this.data[key];
-      }
-    }
-    // may need to return default image path;
-    return null;
   }
 
   isDateInRange(date) {

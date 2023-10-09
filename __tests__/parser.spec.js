@@ -40,4 +40,19 @@ describe("Parser", () => {
 
     expect(thanksGivingResult).toContain("/Holidays/11-28Thanksgiving.png");
   });
+  test("should return WNYMapleFestival1 filepath for dates 03/20/2021 : 03/26/2021", () => {
+    const WNYM1StartResult = parser.getDayNameFromDate("03/20/2021");
+    const WNYM1EndResult = parser.getDayNameFromDate("03/26/2021");
+
+    expect(WNYM1StartResult).toContain("/Holidays/Minor/wny1.png");
+    expect(WNYM1EndResult).toContain("/Holidays/Minor/wny1.png");
+  });
+
+  test("should return WNYMapleFestival2 filepath for dates 03/27/2021 : 03/28/2021", () => {
+    const WNYM2StartResult = parser.getDayNameFromDate("03/27/2021");
+    const WNYM2EndResult = parser.getDayNameFromDate("03/28/2021");
+
+    expect(WNYM2StartResult).toContain("/Holidays/Minor/wny2.png");
+    expect(WNYM2EndResult).toContain("/Holidays/Minor/wny2.png");
+  });
 });
