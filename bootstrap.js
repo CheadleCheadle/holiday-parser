@@ -7,7 +7,7 @@ const parser = new Parser(path);
 parser.parseFile();
 
 const currentDate = new Date('01/18');
-const holidayName = parser.getDayNameFromDate('01/18');
+const holidayName = parser.getDayNameFromDate('02/05/21');
 
 // const imageFilename = parser.getImageFilename(holidayName)
 
