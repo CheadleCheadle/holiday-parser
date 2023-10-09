@@ -1,5 +1,9 @@
 const fs = require("fs");
 
+
+/**
+ * Parses a configuration file and stores holiday names and data mappings.
+ */
 class Parser {
   constructor(filePath) {
     this.filePath = filePath;
@@ -7,11 +11,10 @@ class Parser {
     this.holidayNames = {};
   }
 
-  log() {
-    console.log(this.data);
-    console.log(this.holidayNames);
-  }
 
+  /**
+   * Parses the configuration file and populates the data and holidayNames properties.
+   */
   parseFile() {
     const fileContent = fs.readFileSync(this.filePath, "utf8");
     const lines = fileContent.split("\n");
@@ -26,7 +29,7 @@ class Parser {
           .split("=")
           .map((item) => item.trim());
         if (dataRange.startsWith("(#O")) {
-          // Need to set the variable to equal the date extracted from the dataRange. I.E. "FirstFriday"/febuaray => 02/05/2021
+          // Need to set the variable to equal the date extracted from the dataRange. I.E. "FirstFriday"/Febuaray => 02/05/2021
 
           const ordinal = dataRange.substring(4).slice(0, -1);
           const date = this.calculateOrdinalDate(ordinal);
@@ -34,16 +37,13 @@ class Parser {
           this.holidayNames[variable] = date;
         } else if (dataRange.startsWith("(#V")) {
           // Need to recalculate Palm Sunday and Good Friday!
-          console.log(variable);
           if (variable.includes("Palm")) {
             const date = this.calculatePalmDate(this.holidayNames["Easter"]);
-            console.log("date", date);
             this.holidayNames[variable] = date;
           } else if (variable.includes("Good")) {
             const date = this.calculateGoodFridayDate(
               this.holidayNames["Easter"],
             );
-            console.log("date", date);
             this.holidayNames[variable] = date;
           }
         } else if (dataRange.includes(":")) {
@@ -71,12 +71,16 @@ class Parser {
           .map((item) => {
             item.trim();
           });
-        console.log("This is ordinal date", ordinalDate);
         this.data[ordinalDate] = imagePath;
       }
     }
   }
-  // Method used when given a range of dates: i.e. 12/25/2021 : 12/26/2021
+
+  /**
+   * Parses a date range and returns an array of dates within that range.
+   * @param {string} dateRange - The date range in the format "MM/DD/YYYY : MM/DD/YYYY".
+   * @returns {string[]} An array of formatted dates within the range.
+   */
   parseDateRange(dateRange) {
     const [startDateStr, endDateStr] = dateRange
       .split(" : ")
@@ -96,6 +100,12 @@ class Parser {
     }
     return datesWithinRange;
   }
+
+  /**
+   * Calculates Palm Sunday's date based on the provided Easter date.
+   * @param {string} easterDate - The date of Easter in "MM/DD/YYYY" format.
+   * @returns {string} The date of Palm Sunday in "MM/DD/YYYY" format.
+   */
   calculatePalmDate(easterDate) {
     const easter = new Date(easterDate);
 
@@ -112,6 +122,11 @@ class Parser {
     return formattedPalmSunday;
   }
 
+  /**
+   * Calculates Good Friday's date based on the provided Easter date.
+   * @param {string} easterDate - The date of Easter in "MM/DD/YYYY" format.
+   * @returns {string} The date of Good Friday in "MM/DD/YYYY" format.
+   */
   calculateGoodFridayDate(easterDate) {
     const easter = new Date(easterDate);
 
@@ -128,6 +143,11 @@ class Parser {
     return formattedGoodFriday;
   }
 
+  /**
+   * Calculates an ordinal date based on the provided ordinal and month.
+   * @param {string} ordinalDate - The ordinal date in the format "Ordinal/Month".
+   * @returns {string} The calculated date in "MM/DD/YYYY" format.
+   */
   calculateOrdinalDate(ordinalDate) {
     const [ordinal, month] = ordinalDate.split("/").map((item) => item.trim());
 
@@ -159,6 +179,11 @@ class Parser {
     return formattedDate;
   }
 
+  /**
+   * Extracts the occurrence number from the ordinal date string.
+   * @param {string} ordinal - The ordinal date string.
+   * @returns {number} The occurrence number (1 for First, 2 for Second, etc.).
+   */
   extractOccurrenceWord(ordinal) {
     if (ordinal.includes("First")) {
       return 1;
@@ -173,6 +198,12 @@ class Parser {
     }
   }
 
+  /**
+   * Returns the day of the week (0-6) based on the provided ordinal date string.
+   * @param {string} ordinal - The ordinal date string (e.g., "FirstMonday").
+   * @returns {number} The day of the week (0 for Sunday, 1 for Monday, etc.).
+   * @throws {Error} Throws an error if the ordinal date is invalid.
+   */
   getOrdinalDayOfWeek(ordinal) {
     const validDays = [
       "sunday",
@@ -205,6 +236,11 @@ class Parser {
     }
   }
 
+  /**
+   * Returns the month number (0-11) based on the provided month name.
+   * @param {string} monthName - The name of the month (e.g., "January").
+   * @returns {number} The month number (0 for January, 1 for February, etc.).
+   */
   getMonthNumber(monthName) {
     const months = {
       January: 0,
@@ -223,6 +259,11 @@ class Parser {
     return months[monthName];
   }
 
+  /**
+   * Returns the day of the week number (0-6) based on the provided day of the week name.
+   * @param {string} dayOfWeek - The day of the week name (e.g., "Sunday").
+   * @returns {number} The day of the week number (0 for Sunday, 1 for Monday, etc.).
+   */
   getDayNumber(dayOfWeek) {
     const days = {
       sunday: 0,
@@ -237,15 +278,19 @@ class Parser {
     return days[dayOfWeek.toLowerCase()];
   }
 
+  /**
+   * Retrieves the image file path based on the provided date.
+   * @param {string} date - The date in "MM/DD/YYYY" format.
+   * @returns {string} The image file path associated with the date.
+   */
   getDayNameFromDate(date) {
-      // If date is within a range we find the last occurence
-    let rangeKey = this.getDateWithinRange(date);
+    // If date is within a range we find the last occurence
+    let rangeKey = this.isDateInRange(date);
     if (rangeKey) {
       return this.data[rangeKey];
     }
-      const dateParts = date.split('/');
-      const dateWithoutYear = `${dateParts[0]}/${dateParts[1]}`;
-      console.log("No year", dateWithoutYear);
+    const dateParts = date.split("/");
+    const dateWithoutYear = `${dateParts[0]}/${dateParts[1]}`;
     for (const key in this.holidayNames) {
       const holidayDate = this.holidayNames[key];
       // For ranges of dates inside of a list
@@ -256,16 +301,11 @@ class Parser {
     return "default/filepath";
   }
 
-  getDateWithinRange(date) {
-    // If date is within a range we need to return the latest ranges graphic path
-    const result = this.isDateInRange(date);
-    if (result) {
-      return result;
-    } else {
-      return false;
-    }
-  }
-
+  /**
+   * Checks if the provided date is within a date range and returns the associated image file path.
+   * @param {string} date - The date in "MM/DD/YYYY" format.
+   * @returns {string | null} The key that points to the image file path or null if the date is not within any date range.
+   */
   isDateInRange(date) {
     const keys = Object.keys(this.holidayNames).reverse();
     for (const key of keys) {
@@ -277,4 +317,5 @@ class Parser {
     return null;
   }
 }
+
 module.exports = Parser;

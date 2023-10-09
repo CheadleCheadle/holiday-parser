@@ -7,17 +7,19 @@ const rl = readline.createInterface({
 });
 
 const path = "parthenonsoftware.com_test_holidays.txt";
-
 const parser = new Parser(path);
-
 parser.parseFile();
 
-parser.log();
+console.log("Type 'exit' to exit");
 
+/**
+ * Entry point for processing date inputs.
+ * This function prompts the user to enter a date, validates the input,
+ * and logs the corresponding image filename if the input is a valid date.
+ */
 function main() {
-    console.log("Type 'exit' to exit");
-  rl.question("Enter a date (e.g., MM/DD/2021): ", (dateInput) => {
-    if (dateInput=== "exit") {
+  rl.question("Enter a date (e.g., MM/DD/YYYY): ", (dateInput) => {
+    if (dateInput === "exit") {
       rl.close();
     } else {
       try {

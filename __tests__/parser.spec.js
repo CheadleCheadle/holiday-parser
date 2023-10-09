@@ -7,8 +7,15 @@ const parser = new Parser(path);
 parser.parseFile();
 
 describe("Parser", () => {
-  test("should return christmas filepath", () => {
+  test("should return christmas without year e.g. '12/25' filepath", () => {
     const christmasResult = parser.getDayNameFromDate("12/25");
+
+    expect(christmasResult).toContain(
+      "/Holidays/Christmas/Candle+SparklesAni.gif",
+    );
+  });
+  test("should return christmas with year e.g. '12/25/2021' filepath", () => {
+    const christmasResult = parser.getDayNameFromDate("12/25/2021");
 
     expect(christmasResult).toContain(
       "/Holidays/Christmas/Candle+SparklesAni.gif",
