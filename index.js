@@ -1,5 +1,7 @@
-const Parser = require("./parser.js");
 const readline = require("readline");
+
+// This is the library object for parsing and working with holiday data.
+const Parser = require("./parser.js");
 
 const rl = readline.createInterface({
   input: process.stdin,
